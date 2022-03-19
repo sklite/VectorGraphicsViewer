@@ -19,11 +19,6 @@ namespace GraphicsViewer.Core
             _graphicsRenderer.ZoomChanged += ZoomChanged;
         }
 
-        private void ZoomChanged(object? sender, ZoomEventArgs e)
-        {
-            _view?.UpdateZoom(e.Zoom);
-        }
-
         public void SetView(IVectorGraphicView view)
         {
             if (_view != null)
@@ -38,6 +33,11 @@ namespace GraphicsViewer.Core
             _view.FileImported += FileImported;
             _view.GraphicsInitialized += GraphicsInitialized;
             _view.PanelClicked += PanelClicked;
+        }
+
+        private void ZoomChanged(object? sender, ZoomEventArgs e)
+        {
+            _view?.UpdateZoom(e.Zoom);
         }
 
         private void PanelClicked(object? sender, EventArgs e)
@@ -55,8 +55,11 @@ namespace GraphicsViewer.Core
         {
             _view.SetBusy(true);
             
-            var figures = await Task.Run(() => _inputProcessor.ProcessInputFile(e.FullPath));
-            _graphicsRenderer.Draw(figures);
+            await Task.Run(() =>
+            {
+                var figures = _inputProcessor.ProcessInputFile(e.FullPath);
+                _graphicsRenderer.Draw(figures);
+            });
             
             _view.SetBusy(false);
         }

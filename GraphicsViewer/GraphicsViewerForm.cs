@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows.Forms;
 using GraphicsViewer.Core;
 using GraphicsViewer.Core.Events;
+using GraphicsViewer.Extensions;
 
 namespace GraphicsViewer
 {
@@ -35,13 +36,16 @@ namespace GraphicsViewer
 
         public void SetBusy(bool isBusy)
         {
-            btImportFile.Enabled = !isBusy;
-            btImportFile.Text = isBusy ? "Importing file" : "Import file";
+            btImportFile.Invoke(_ =>
+            {
+                btImportFile.Enabled = !isBusy;
+                btImportFile.Text = isBusy ? "Importing file" : "Import file";
+            });
         }
 
         public void UpdateZoom(int zoomPercentage)
         {
-            lbZoom.Text = $"Zoom level: {zoomPercentage}%";
+            lbZoom.Invoke(_ => lbZoom.Text = $"Zoom level: {zoomPercentage}%");
         }
 
         public event EventHandler<ImportFileEventArgs>? FileImported;
