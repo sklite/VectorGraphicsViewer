@@ -18,6 +18,7 @@ namespace GraphicsViewer
         {
             using var ofd = new OpenFileDialog();
             ofd.InitialDirectory = Path.Combine(Directory.GetCurrentDirectory(), "SampleData");
+            ofd.Filter = "JSON files |*.json";
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 FileImported?.Invoke(this, new ImportFileEventArgs(ofd.FileName));
